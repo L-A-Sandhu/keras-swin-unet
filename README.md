@@ -1,7 +1,6 @@
 # Swin-UNet Road Extraction Model
 
 ## Overview  
-## Overview  
 
 This repository provides a **Swin-UNet** implementation for **road extraction** from satellite imagery, specifically designed to handle the challenges of segmentation in **remote sensing**. The model combines the power of **Swin Transformers** for feature extraction and **U-Net** for segmentation, making it particularly effective for **semantic segmentation tasks** like road extraction. The model has achieved **state-of-the-art performance** on the **DeepGlobe Road Extraction Dataset**.
 
