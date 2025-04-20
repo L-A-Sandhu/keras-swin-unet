@@ -135,6 +135,8 @@ if __name__ == '__main__':
     parser.add_argument("--num_mlp", type=int, default=512, help='Number of MLP nodes within the Transformer')
     parser.add_argument("--input_scale", type=int, default=255, help="Scaling factor for input images (65536 for 16-bit, 255 for 8-bit)")
     parser.add_argument("--mask_scale", type=int, default=255, help="Scaling factor for mask images (65536 for 16-bit, 255 for 8-bit)")
+    parser.add_argument("--input_shape", type=int, nargs=3, default=[512, 512, 3], help="Shape of input images (height, width, channels)")
+
     parser.add_argument('--gamma', type=float, required=True, help='Gamma value for focal loss.')
     parser.add_argument('--alpha', type=float, required=True, help='Alpha value for focal loss.')
     parser.add_argument("--maxSavedSamples", type=int, default=10, help="How many visual images you want to save during inference")
@@ -184,7 +186,8 @@ if __name__ == '__main__':
         if not os.path.exists(args.model_dir):
             os.makedirs(args.model_dir)
         model = get_model(
-            args.filter_num_begin, 
+            input_size=tuple(args.input_shape),
+            filter_num_begin=args.filter_num_begin, 
             args.depth, 
             args.stack_num_down, 
             args.stack_num_up, 

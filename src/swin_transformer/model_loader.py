@@ -4,14 +4,32 @@ from tensorflow.keras.layers import Input, Dense, Conv2D, concatenate
 from keras_vision_transformer import transformer_layers
 from keras_vision_transformer import swin_layers
 
-def get_model(filter_num_begin, depth, stack_num_down, stack_num_up, patch_size, num_heads, window_size, num_mlp,num_classes):
-    input_size = (512, 512, 3)
+def get_model(input_size, filter_num_begin, depth, stack_num_down, stack_num_up, patch_size, num_heads, window_size, num_mlp, num_classes):
+    """
+    Create a model with flexible input size and output classes.
+    
+    Parameters:
+    - input_size (tuple): The input image size as (height, width, channels).
+    - filter_num_begin (int): Number of filters for the first convolutional layer.
+    - depth (int): Depth of the network.
+    - stack_num_down (int): Number of downsampling layers.
+    - stack_num_up (int): Number of upsampling layers.
+    - patch_size (tuple): Size of patches to be extracted from input.
+    - num_heads (list): List of number of attention heads for each transformer block.
+    - window_size (list): List of window sizes for each transformer block.
+    - num_mlp (int): Size of the MLP layer.
+    - num_classes (int): Number of output classes (this determines the number of channels in the final output).
+    
+    Returns:
+    - model (keras.Model): The compiled model.
+    """
     IN = Input(input_size)
     X = swin_unet_2d_base(IN, filter_num_begin, depth, stack_num_down, stack_num_up, patch_size, num_heads, window_size, num_mlp, shift_window=True, name='swin_unet')
-    n_labels = num_classes
-    OUT = Conv2D(n_labels, kernel_size=1, use_bias=False, activation='softmax')(X)
-    model = Model(inputs=[IN,], outputs=[OUT,])
+    n_labels = num_classes  # Number of output classes
+    OUT = Conv2D(n_labels, kernel_size=1, use_bias=False, activation='softmax')(X)  # Final output layer with num_classes channels
+    model = Model(inputs=[IN], outputs=[OUT])
     return model
+
 def swin_unet_2d_base(input_tensor, filter_num_begin, depth, stack_num_down, stack_num_up, patch_size, num_heads, window_size, num_mlp, shift_window=True, name='swin_unet'):
     input_size = list(input_tensor.shape)[1:]
     num_patch_x = input_size[0] // patch_size[0]
