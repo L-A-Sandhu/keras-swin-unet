@@ -2,7 +2,7 @@
 name = "swin-transformer"
 version = "0.1.0"
 description = "A robust, flexible Swin Transformer package for segmentation tasks."
-authors = ["Your Name <your.email@example.com>"]
+authors = ["L-A-Sandhu <laeeq.aslam.100@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 
@@ -10,5 +10,14 @@ packages = [
     { include = "swin_transformer", from = "src" },
     { include = "keras_vision_transformer", from = "src" }
 ]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.12"
+
 [tool.poetry.scripts]
 swin-transformer = "swin_transformer.main:main"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+pytest-cov = "^6.1.1"
+
