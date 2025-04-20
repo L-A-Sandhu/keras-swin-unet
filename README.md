@@ -128,44 +128,12 @@ Each of these four images shows the following sub-images (arranged in a grid):
 
 Below are the four unified images:
 
-#### Unified Image 1
-**Description**: 
-This image includes four sub-images representing the following:
-- **Original Image vs Predicted Mask**  
-- **Ground Truth Mask**  
-- **True Positives (TP), False Positives (FP), False Negatives (FN), and True Negatives (TN) Overlay**  
-- **Predicted Mask with Ground Truth Overlay**
+#### Sample Images from Test dataset
+
 
 ![Unified Image 1](Results/1.png)
-
-#### Unified Image 2
-**Description**: 
-This image includes the following sub-images:
-- **Original Image vs Predicted Mask**
-- **Ground Truth Mask**
-- **True Positives (TP), False Positives (FP), False Negatives (FN), and True Negatives (TN) Overlay**
-- **Predicted Mask with Ground Truth Overlay**
-
 ![Unified Image 2](Results/2.png)
-
-#### Unified Image 3
-**Description**: 
-This image includes the following sub-images:
-- **Original Image vs Predicted Mask**
-- **Ground Truth Mask**
-- **True Positives (TP), False Positives (FP), False Negatives (FN), and True Negatives (TN) Overlay**
-- **Predicted Mask with Ground Truth Overlay**
-
 ![Unified Image 3](Results/3.png)
-
-#### Unified Image 4
-**Description**: 
-This image includes the following sub-images:
-- **Original Image vs Predicted Mask**
-- **Ground Truth Mask**
-- **True Positives (TP), False Positives (FP), False Negatives (FN), and True Negatives (TN) Overlay**
-- **Predicted Mask with Ground Truth Overlay**
-
 ![Unified Image 4](Results/4.png)
 
 ---
