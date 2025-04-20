@@ -24,7 +24,7 @@
 | **F1 Score**     | 0.8966   | +12% vs ResNet50    |
 | **Inference Speed** | 35ms/img | 3x faster than D-LinkNet |
 
-![Road Extraction Visualization](Results/1.png)
+![Road Extraction Visualization](Results/3.png)
 *Visual comparison showing precise road network detection in challenging terrain*
 
 ## 🛠️ Quick Start for Developers
