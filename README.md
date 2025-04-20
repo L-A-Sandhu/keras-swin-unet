@@ -126,9 +126,7 @@ Each of these four images shows the following sub-images (arranged in a grid):
 3. **True Positives (TP), False Positives (FP), False Negatives (FN), and True Negatives (TN) Overlay**  
 4. **Predicted Mask with Ground Truth Overlay**
 
-Below are the four unified images:
 
-#### Sample Images from Test dataset
 
 
 ![Unified Image 1](Results/1.png)
