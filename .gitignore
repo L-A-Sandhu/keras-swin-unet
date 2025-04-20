@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.env
+.venv
+.ipynb_checkpoints
+*.keras
+*.h5
+*.ckpt
+*.png
+*.json
+.DS_Store
+.idea/
+.vscode/
