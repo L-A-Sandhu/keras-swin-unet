@@ -1,17 +1,33 @@
 # Swin-UNet Road Extraction Model
 
 ## Overview  
-This repository provides a **Swin-UNet** implementation for **road extraction** from satellite imagery. Combining **Swin Transformers** for feature extraction and **U-Net** for segmentation, the model achieves state-of-the-art performance on the **DeepGlobe Road Extraction Dataset**. Key metrics include accuracy, F1 score, precision, recall, and AUC.
+## Overview  
 
----
+This repository provides a **Swin-UNet** implementation for **road extraction** from satellite imagery, specifically designed to handle the challenges of segmentation in **remote sensing**. The model combines the power of **Swin Transformers** for feature extraction and **U-Net** for segmentation, making it particularly effective for **semantic segmentation tasks** like road extraction. The model has achieved **state-of-the-art performance** on the **DeepGlobe Road Extraction Dataset**.
 
-## Features  
-- **Hybrid Architecture**: Swin Transformer + U-Net for efficient segmentation  
-- **Flexible Input Shapes**: Supports 512x512, 256x256, and custom resolutions  
-- **Customizable Training**: Adjust batch size, learning rate, and hyperparameters  
-- **Performance Metrics**: Accuracy, F1 Score, Precision, Recall, AUC, Confusion Matrix  
-- **Visualization Tools**: Compare predictions vs. ground truth with TP/FP/FN/TN overlays  
-- **Lightweight Inference**: Average prediction time of 35ms per image  
+### Key Features:
+- **AUC Focal Loss**: We use **AUC Focal Loss**, a loss function that is particularly effective for imbalanced datasets. This loss function gives higher priority to the minority class (in this case, the road class), improving the model's ability to detect smaller or underrepresented classes, which is crucial for tasks like road segmentation in satellite imagery.
+  
+- **Swin Transformer**: The model integrates the **Swin Transformer** architecture, which provides excellent performance in handling large-scale spatial dependencies in images, making it ideal for high-resolution satellite imagery.
+
+- **U-Net Architecture**: The **U-Net** component of the model helps achieve precise segmentation by leveraging an encoder-decoder structure with skip connections. This allows for fine-grained predictions, especially for complex segmentation tasks like road extraction.
+
+- **Multiclass Segmentation**: Although it has been tested on binary road extraction (road vs. non-road), the model is capable of **multiclass segmentation**. By adjusting the number of output classes, the same architecture can be applied to more complex segmentation problems, such as identifying multiple classes (e.g., roads, buildings, water bodies) in satellite images.
+
+- **TensorFlow Implementation**: This is a **TensorFlow 2.x** implementation, making it highly optimized for training with modern GPUs. It offers flexibility for both **single-class and multi-class segmentation** tasks. The model can be easily adapted to work with different datasets, and it supports customizable configurations such as the number of attention heads, patch sizes, and window sizes.
+
+The **Swin-UNet** model is designed to be flexible, allowing researchers and practitioners to train on a variety of segmentation tasks, leveraging the capabilities of both **Swin Transformers** and **U-Net** in a unified framework.
+
+Key metrics evaluated during training and testing include:
+- **Accuracy**
+- **F1 Score**
+- **Precision**
+- **Recall**
+- **AUC (Area Under Curve)**
+
+With this flexible architecture, you can easily apply it to other **remote sensing segmentation tasks** beyond road extraction, making it a versatile tool for semantic segmentation in **satellite imagery**, **urban planning**, and **geospatial analysis**.
+
+
 
 ---
 
