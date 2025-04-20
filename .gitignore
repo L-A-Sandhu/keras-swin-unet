@@ -6,7 +6,6 @@ __pycache__/
 *.keras
 *.h5
 *.ckpt
-*.png
 *.json
 .DS_Store
 .idea/
