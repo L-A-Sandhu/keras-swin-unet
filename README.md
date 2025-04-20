@@ -98,15 +98,9 @@ model = SwinUNet(window_size=7,  # Optimal for 512px images
 ```
 🤝 **Collaboration & Support**
 
-**Contribution Guidelines**:
-
-- 📌 Open issues for feature requests
-- 🔄 Submit PRs with clear documentation
-- 💬 Join our Discord Community
 
 **Maintainer**:  
-Laeeq Aslam  
-Email
+Laeeq Aslam(laeeq.aslam.100@gmail.com)
 
 📚 **Citations & Acknowledgements**
 
