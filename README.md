@@ -87,39 +87,130 @@ python main.py \
   --inps 'infer' \
   --input_shape 512 512 3
 ```
-## Performance Metrics
+## Results  
 
-Trained on DeepGlobe dataset (512x512 images):
+### Performance on the DeepGlobe Road Extraction Dataset
 
-| Metric                | Value     |
-|-----------------------|-----------|
-| Accuracy             | 98.38%    |
-| F1 Score             | 0.8966    |
-| Precision            | 0.9011    |
-| Recall               | 0.8922    |
-| AUC                  | 0.8922    |
-| Model Size           | 322.01 MB |
-| Inference Time/Image | 35.20 ms  |
+The **Swin-UNet** model has demonstrated outstanding performance on the **DeepGlobe Road Extraction Dataset**. Below are the key evaluation metrics:
+
+- **Accuracy**: 98.38%
+- **F1 Score**: 0.8966
+- **Precision**: 90.11%
+- **Recall**: 89.22%
+- **AUC (Area Under Curve)**: 0.8922
 
 ### Confusion Matrix:
+The confusion matrix provides a detailed summary of the classification results:
 
-```json
-[[7977176, 64087],  // TN, FP
- [72120, 275225]]   // FN, TP
-```
-## Visualization
+|                   | Predicted Road | Predicted Non-Road |
+|-------------------|----------------|--------------------|
+| **Actual Road**   | 2,752,25       | 72,120             |
+| **Actual Non-Road** | 64,087         | 7,977,176          |
 
-Sample outputs include:
-- Input satellite image
-- Predicted road mask
-- Ground truth mask
-- TP/FP/FN overlay
+#### Model Size:
+- **Model Size (MB)**: 322.01 MB
 
-## Prediction Visualization
+#### Average Prediction Time:
+- **Average Prediction Time per Example**: 35.20 ms
 
-## License
+---
 
-MIT License - see LICENSE for details.
+### Visual Results
+
+The following **unified images** display the comparison between the **original image**, **predicted mask**, **ground truth mask**, and the **TP/FP/FN/TN overlay**.
+
+Each of these four images shows the following sub-images (arranged in a grid):
+
+1. **Original Image vs Predicted Mask**  
+2. **Ground Truth Mask**  
+3. **True Positives (TP), False Positives (FP), False Negatives (FN), and True Negatives (TN) Overlay**  
+4. **Predicted Mask with Ground Truth Overlay**
+
+Below are the four unified images:
+
+#### Unified Image 1
+**Description**: 
+This image includes four sub-images representing the following:
+- **Original Image vs Predicted Mask**  
+- **Ground Truth Mask**  
+- **True Positives (TP), False Positives (FP), False Negatives (FN), and True Negatives (TN) Overlay**  
+- **Predicted Mask with Ground Truth Overlay**
+
+![Unified Image 1](Results/1.png)
+
+#### Unified Image 2
+**Description**: 
+This image includes the following sub-images:
+- **Original Image vs Predicted Mask**
+- **Ground Truth Mask**
+- **True Positives (TP), False Positives (FP), False Negatives (FN), and True Negatives (TN) Overlay**
+- **Predicted Mask with Ground Truth Overlay**
+
+![Unified Image 2](Results/2.png)
+
+#### Unified Image 3
+**Description**: 
+This image includes the following sub-images:
+- **Original Image vs Predicted Mask**
+- **Ground Truth Mask**
+- **True Positives (TP), False Positives (FP), False Negatives (FN), and True Negatives (TN) Overlay**
+- **Predicted Mask with Ground Truth Overlay**
+
+![Unified Image 3](Results/3.png)
+
+#### Unified Image 4
+**Description**: 
+This image includes the following sub-images:
+- **Original Image vs Predicted Mask**
+- **Ground Truth Mask**
+- **True Positives (TP), False Positives (FP), False Negatives (FN), and True Negatives (TN) Overlay**
+- **Predicted Mask with Ground Truth Overlay**
+
+![Unified Image 4](Results/4.png)
+
+---
+
+### Performance Metrics Breakdown
+
+**Accuracy**: The percentage of correct predictions. High accuracy indicates that the model is effective at distinguishing between road and non-road areas in satellite imagery.
+
+\[
+\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN} \approx 98.38\%
+\]
+
+**Precision**: The percentage of predicted road pixels that are actually road pixels. High precision indicates that the model does not often falsely predict roads where there are none.
+
+\[
+\text{Precision} = \frac{TP}{TP + FP} \approx 90.11\%
+\]
+
+**Recall**: The percentage of actual road pixels that are correctly predicted as road pixels. High recall indicates that the model does not miss many road pixels.
+
+\[
+\text{Recall} = \frac{TP}{TP + FN} \approx 89.22\%
+\]
+
+**F1 Score**: The harmonic mean of precision and recall, which balances the trade-off between precision and recall.
+
+\[
+\text{F1 Score} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}} \approx 0.8966
+\]
+
+**AUC (Area Under Curve)**: Measures how well the model distinguishes between the road and non-road classes.
+
+\[
+\text{AUC} \approx 0.8922
+\]
+
+### Visual Comparison for Inference
+
+For each inference, we visualize the following comparisons for the first few images:
+
+1. **Original Image vs Predicted Mask**
+2. **Ground Truth Mask**
+3. **True Positives (TP), False Positives (FP), False Negatives (FN), and True Negatives (TN) Overlay**
+4. **Predicted Mask with Ground Truth Overlay**
+
 
 ## Contact
 
