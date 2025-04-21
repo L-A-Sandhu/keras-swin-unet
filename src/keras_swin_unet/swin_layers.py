@@ -4,7 +4,7 @@
 # import tensorflow as tf
 # from tensorflow.keras.layers import Dense, Dropout, LayerNormalization
 # from tensorflow.keras.activations import softmax
-# from keras_vision_transformer.util_layers import drop_path
+# from keras_swin_unet.util_layers import drop_path
 
 # def window_partition(x, window_size):
 #     _, H, W, C = x.get_shape().as_list()
@@ -226,7 +226,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.layers import Dense, Dropout, LayerNormalization
 from tensorflow.keras.activations import softmax
-from keras_vision_transformer.util_layers import drop_path
+from keras_swin_unet.util_layers import drop_path
 
 def window_partition(x, window_size):
     _, H, W, C = x.get_shape().as_list()
