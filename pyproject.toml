@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name        = "keras-swin-unet"
-version     = "0.1.4"                           # bump as you release
+version     = "0.1.5"                           # bump as you release
 description = "A robust, flexible Swin‑UNet package built with Keras/TensorFlow for image‑segmentation tasks."
 authors     = ["L‑A‑Sandhu <laeeq.aslam.100@gmail.com>"]
 license     = "MIT"
