@@ -2,32 +2,39 @@
 requires = ["poetry-core>=1.5.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.poetry]
-name = "keras-swin-unet"
-version = "0.1.2"
-description = "A robust, flexible Swin UNET package Using Keras and Tensorflow for Image segmentation tasks."
-authors = ["L-A-Sandhu <laeeq.aslam.100@gmail.com>"]
-license = "MIT"
-readme = "README.md"
 
+[tool.poetry]
+name        = "keras-swin-unet"
+version     = "0.1.2"                           # bump as you release
+description = "A robust, flexible Swin‑UNet package built with Keras/TensorFlow for image‑segmentation tasks."
+authors     = ["L‑A‑Sandhu <laeeq.aslam.100@gmail.com>"]
+license     = "MIT"
+readme      = "README.md"
+
+# ship both runtime packages
 packages = [
-    { include = "keras_swin_unet", from = "src" }
+    { include = "keras_swin_unet",  from = "src" },
+    { include = "swin_transformer", from = "src" }
 ]
 
+
 [tool.poetry.dependencies]
-python = ">=3.10,<3.11"
-numpy = "^1.26.4"
-tensorflow = "^2.19.0"
-pillow = "^11.2.1"
-matplotlib = "^3.10.1"
-scikit-learn = "^1.6.1"
-scipy = "^1.15.2"
-tqdm = "^4.67.1"
+python        = ">=3.10,<3.11"
+numpy         = "^1.26.4"
+tensorflow    = "^2.19.0"
+pillow        = "^11.2.1"
+matplotlib    = "^3.10.1"
+scikit-learn  = "^1.6.1"
+scipy         = "^1.15.2"
+tqdm          = "^4.67.1"
+
 
 [tool.poetry.scripts]
-swin-transformer = "swin_transformer.main:main"
+# public console command → cli.main()
+swin-unet = "swin_transformer.cli:main"
+
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.3.5"
+pytest     = "^8.3.5"
 pytest-cov = "^6.1.1"
-twine = "^6.1.0"
+twine      = "^6.1.0"
