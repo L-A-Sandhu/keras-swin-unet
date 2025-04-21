@@ -1,7 +1,11 @@
+[build-system]
+requires = ["poetry-core>=1.5.0"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
-name = "tf_swin_unet"
-version = "0.1.7"
-description = "A robust, flexible Swin UNET Transformer package for segmentation tasks."
+name = "keras-swin-unet"
+version = "0.1.0"
+description = "A robust, flexible Swin UNET package Using Keras and Tensorflow for Image segmentation tasks."
 authors = ["L-A-Sandhu <laeeq.aslam.100@gmail.com>"]
 license = "MIT"
 readme = "README.md"
@@ -11,7 +15,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.11"
+python = ">=3.10,<3.11"
 numpy = "^1.26.4"
 tensorflow = "^2.19.0"
 pillow = "^11.2.1"
@@ -27,4 +31,3 @@ swin-transformer = "swin_transformer.main:main"
 pytest = "^8.3.5"
 pytest-cov = "^6.1.1"
 twine = "^6.1.0"
-
