@@ -1,32 +1,31 @@
 name: Publish to PyPI
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - 'v*.*.*'
 
 jobs:
-  build-publish:
+  build-and-publish:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 📥 Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: 🔧 Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.10"
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
 
-    - name: 📦 Install Poetry
-      run: |
-        curl -sSL https://install.python-poetry.org | python3 -
-        echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - name: Install build tools
+        run: pip install poetry twine
 
-    - name: 🔐 Configure Poetry with PyPI token
-      run: poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN }}
+      - name: Build package
+        run: poetry build
 
-    - name: 🛠️ Build and Publish
-      run: |
-        poetry install
-        poetry build
-        poetry publish
+      - name: Publish to PyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: twine upload dist/*.tar.gz dist/*.whl
