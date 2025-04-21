@@ -1,18 +1,17 @@
 [tool.poetry]
-name = "swin-transformer"
-version = "0.1.0"
-description = "A robust, flexible Swin Transformer package for segmentation tasks."
+name = "tf_swin_unet"
+version = "0.1.7"
+description = "A robust, flexible Swin UNET Transformer package for segmentation tasks."
 authors = ["L-A-Sandhu <laeeq.aslam.100@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 
 packages = [
-    { include = "swin_transformer", from = "src" },
-    { include = "keras_vision_transformer", from = "src" }
+    { include = "keras_swin_unet", from = "src" }
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.12"
+python = ">=3.9,<3.11"
 numpy = "^1.26.4"
 tensorflow = "^2.19.0"
 pillow = "^11.2.1"
@@ -27,4 +26,5 @@ swin-transformer = "swin_transformer.main:main"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
 pytest-cov = "^6.1.1"
+twine = "^6.1.0"
 

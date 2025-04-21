@@ -1,8 +1,8 @@
 from tensorflow.keras.models import Model
 import tensorflow as tf
 from tensorflow.keras.layers import Input, Dense, Conv2D, concatenate
-from keras_vision_transformer import transformer_layers
-from keras_vision_transformer import swin_layers
+from keras_swin_unet import transformer_layers
+from keras_swin_unet import swin_layers
 
 def get_model(input_size, filter_num_begin, depth, stack_num_down, stack_num_up, patch_size, num_heads, window_size, num_mlp, num_classes):
     """

@@ -4,8 +4,8 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense, Conv2D, concatenate
-from keras_vision_transformer import swin_layers
-from keras_vision_transformer import transformer_layers
+from keras_swin_unet import swin_layers
+from keras_swin_unet import transformer_layers
 import matplotlib.pyplot as plt
 import argparse
 import json
