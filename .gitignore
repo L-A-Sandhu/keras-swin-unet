@@ -10,3 +10,11 @@ __pycache__/
 .DS_Store
 .idea/
 .vscode/
+# build artefacts
+dist/
+build/
+*.egg-info/
+
+# virtualenvs
+.venv
+.venv-ci/
