@@ -1,7 +1,10 @@
 from tensorflow.keras.models import Model
 import tensorflow as tf
 from tensorflow.keras.layers import Input, Dense, Conv2D, concatenate
-from keras_swin_unet import transformer_layers
+
+# from keras_swin_unet import transformer_layers
+from keras_swin_unet import transformer_layers, swin_layers
+
 from keras_swin_unet import swin_layers
 
 

@@ -449,7 +449,7 @@ def run_train(args):
     )
 
     # 2. DataLoaders
-    def make_loader(ids, mode, img_size):
+    def make_loader(ids, mode):
         return DynamicDataLoader(
             data_dir=args.data,
             ids=ids,
@@ -463,10 +463,9 @@ def run_train(args):
             mask_scale=args.mask_scale,
         )
 
-    img_size = tuple(args.input_shape[:2])
-    train_loader = make_loader(train_ids, "train", img_size)
-    val_loader = make_loader(val_ids, "val", img_size)
-    test_loader = make_loader(test_ids, "test", img_size)
+    train_loader = make_loader(train_ids, "train")
+    val_loader = make_loader(val_ids, "val")
+    test_loader = make_loader(test_ids, "test")
 
     # 3. Model
     model = get_model(
@@ -537,125 +536,37 @@ def run_train(args):
 
 
 def run_infer(args):
-    import os
-    import numpy as np
-    import matplotlib.pyplot as plt
-    from PIL import Image
-    from tensorflow.keras.models import load_model
-    from swin_transformer.split_data import split_dataset
-    from swin_transformer.data_loader import DynamicDataLoader
-    from swin_transformer.AUC_LOSS import auc_focal_loss
-    from keras_swin_unet import transformer_layers, swin_layers
-    from swin_transformer.metrics import (
-        compute_binary_metrics,
-        compute_multiclass_metrics,
-        plot_binary_classification_graphs,
-    )
-    from swin_transformer.cli import visualize_comparison
-
-    # Load model with custom objects
+    # 1. Load model
     custom_objects = {
         "auc_focal_loss_fixed": auc_focal_loss(alpha=args.alpha, gamma=args.gamma),
         **transformer_layers.__dict__,
         **swin_layers.__dict__,
     }
-
     model = load_model(
-        os.path.join(args.model_dir, "best_model.keras"),
-        custom_objects=custom_objects,
+        os.path.join(args.model_dir, "best_model.keras"), custom_objects=custom_objects
     )
 
-    if args.image:
-        # ─── Inference on a single image ─────────────────────────────
-        img = np.array(Image.open(args.image).convert("RGB"))
+    # 2. Load & preprocess
+    img = np.array(Image.open(args.image).convert("RGB"))
+    inp = img.astype(np.float32)[None] / args.input_scale
+    preds = model.predict(inp)[0]
+    mask = preds.argmax(-1)
 
-        # Ensure model input shape match
-        expected_shape = model.input_shape[1:3]  # (H, W)
-        if img.shape[:2] != expected_shape:
-            print(
-                f"⚠️ Resizing image from {img.shape[:2]} to model expected shape {expected_shape}"
-            )
-            img = np.array(
-                Image.fromarray(img).resize(expected_shape[::-1])
-            )  # PIL uses (W, H)
+    # 3. Optionally visualize multiple
+    if args.visualize > 1:
+        # wrap into batch and call visualize_comparison
+        k = 0
+        k = visualize_comparison(
+            k, inp, pred_logits := [preds], np.array([preds]), 0, args.num_classes
+        )
+        return
 
-        # Normalize and predict
-        inp = img.astype(np.float32)[None] / args.input_scale
-        preds = model.predict(inp)[0]
-        mask = preds.argmax(-1)
-
-        if args.visualize > 1:
-            from swin_transformer.cli import visualize_comparison
-
-            k = 0
-            visualize_comparison(
-                k, inp, pred_logits := [preds], np.array([preds]), 0, args.num_classes
-            )
-            return
-
-    # Save overlay
+    #  single-image overlay
     plt.imshow(img)
     plt.imshow(mask, alpha=0.5, cmap="coolwarm")
     plt.axis("off")
     plt.savefig(args.output, bbox_inches="tight")
     print(f"🖼 Saved overlay to {args.output}")
-    return
-    # ─── Inference on test loader ─────────────────────────────────────
-    all_ids = os.listdir(os.path.join(args.data, "images"))
-    _, _, test_ids = split_dataset(all_ids, 0.8, 0.1, 0.1)
-
-    test_loader = DynamicDataLoader(
-        data_dir=args.data,
-        ids=test_ids,
-        batch_size=4,
-        img_size=(512, 512),
-        mode="test",
-        image_dtype=np.float32,
-        mask_dtype=np.int32,
-        num_classes=args.num_classes,
-        input_scale=args.input_scale,
-        mask_scale=args.mask_scale,
-    )
-
-    k = 0
-    y_true_all = []
-    y_pred_all = []
-    y_prob_all = []
-
-    for X, y in test_loader:
-        preds = model.predict(X)
-        y_true_all.extend(np.argmax(y, axis=-1).flatten())
-        y_pred_all.extend(np.argmax(preds, axis=-1).flatten())
-        y_prob_all.extend(np.max(preds, axis=-1).flatten())
-
-        if args.visualize == -1:
-            # Visualize all test samples
-            for i in range(X.shape[0]):
-                k = visualize_comparison(k, X, y, preds, i, args.num_classes)
-        elif args.visualize > 0:
-            for i in range(min(args.visualize - k, X.shape[0])):
-                k = visualize_comparison(k, X, y, preds, i, args.num_classes)
-            if k >= args.visualize:
-                break
-
-    if args.visualize:
-        print(f"✅ Inference done. Visualized {k} images from test set.")
-
-    y_trues = np.array(y_true_all)
-    y_preds = np.array(y_pred_all)
-    y_probs = np.array(y_prob_all)
-
-    if args.num_classes == 2:
-        metrics = compute_binary_metrics(y_trues, y_preds, y_probs)
-        plot_binary_classification_graphs(
-            y_trues, y_probs, y_preds, model_dir=args.model_dir
-        )
-    else:
-        metrics = compute_multiclass_metrics(y_trues, y_preds, args.num_classes)
-
-    with open(os.path.join(args.model_dir, "inference_metrics.json"), "w") as f:
-        json.dump(metrics, f, indent=4)
-    print("✅ Inference metrics saved to inference_metrics.json")
 
 
 def main():
