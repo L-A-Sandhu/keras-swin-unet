@@ -751,7 +751,7 @@ def run_infer(args):
     with open("model_evaluation_metrics.json", "w") as f:
         json.dump(metrics, f, indent=2)
 
-    print("✅ Inference done. Metrics saved to model_evaluation_metrics.json")
+    print("✅ Inference Completed. Metrics saved to model_evaluation_metrics.json")
 
 
 def main():
