@@ -471,7 +471,7 @@ def visualize_comparison(k, X_images, y, refined_segmentation, batch_idx, num_cl
     plt.axis('off')
 
     # Overlay TP, FP, FN, TN
-    TP = (proposed_mask == actual_mask) & (actual_mask == 1)  # True Positives
+    TP = (proposed_mask == actual_mask) & (actual_mask == 1)  
     FP = (proposed_mask != actual_mask) & (proposed_mask == 1)  # False Positives
     FN = (proposed_mask != actual_mask) & (actual_mask == 1)  # False Negatives
     TN = (proposed_mask == actual_mask) & (actual_mask == 0)  # True Negatives
