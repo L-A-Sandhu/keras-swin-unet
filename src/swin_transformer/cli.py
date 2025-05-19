@@ -567,7 +567,95 @@ def run_train(args):
 #     plt.axis("off")
 #     plt.savefig(args.output, bbox_inches="tight")
 #     print(f"🖼 Saved overlay to {args.output}")
+# def run_infer(args):
+#     # Load the model
+#     custom_objects = {
+#         "auc_focal_loss_fixed": auc_focal_loss(alpha=args.alpha, gamma=args.gamma),
+#         **transformer_layers.__dict__,
+#         **swin_layers.__dict__,
+#     }
+#     model = load_model(
+#         os.path.join(args.model_dir, "best_model.keras"), custom_objects=custom_objects
+#     )
+
+#     # ----------- SINGLE IMAGE MODE ------------
+#     if args.image:
+#         img = np.array(Image.open(args.image).convert("RGB").resize(
+#             (args.input_shape[1], args.input_shape[0])
+#         ))  # resize to match input_shape (W, H)
+#         inp = img.astype(np.float32)[None] / args.input_scale
+#         preds = model.predict(inp)[0]
+#         mask = preds.argmax(-1)
+
+#         if args.visualize > 1:
+#             visualize_comparison(0, inp, np.array([preds]), np.array([preds]), 0, args.num_classes)
+#         else:
+#             plt.imshow(img)
+#             plt.imshow(mask, alpha=0.5, cmap="coolwarm")
+#             plt.axis("off")
+#             plt.savefig(args.output, bbox_inches="tight")
+#             print(f"🖼 Saved overlay to {args.output}")
+#         return
+
+#     # ----------- TEST LOADER MODE ------------
+#     print("🧪 Running inference on test dataset...")
+#     test_ids = os.listdir(os.path.join(args.data, "images"))  # assuming all available
+#     _, _, test_ids = split_dataset(test_ids, train_frac=0.8, val_frac=0.1, test_frac=0.1)
+
+#     test_loader = DynamicDataLoader(
+#         data_dir=args.data,
+#         ids=test_ids,
+#         batch_size=args.bs,
+#         img_size=tuple(args.input_shape),
+#         mode="test",
+#         image_dtype=np.float32,
+#         mask_dtype=np.int32,
+#         num_classes=args.num_classes,
+#         input_scale=args.input_scale,
+#         mask_scale=args.mask_scale,
+#     )
+
+#     y_true_all, y_pred_all = [], []
+#     k = 0
+#     total_time, num_examples = 0, 0
+
+#     for X_batch, y_batch in test_loader:
+#         start_time = time.time()
+#         preds = model.predict(X_batch)
+#         total_time += time.time() - start_time
+#         num_examples += X_batch.shape[0]
+
+#         y_true_all.extend(np.argmax(y_batch, axis=-1).flatten())
+#         y_pred_all.extend(np.argmax(preds, axis=-1).flatten())
+
+#         if args.visualize:
+#             for i in range(min(args.visualize, X_batch.shape[0])):
+#                 k = visualize_comparison(k, X_batch, y_batch, preds, i, args.num_classes)
+
+#     # Metrics
+#     metrics = {
+#         "Accuracy": accuracy_score(y_true_all, y_pred_all),
+#         "F1": f1_score(y_true_all, y_pred_all, average="macro"),
+#         "Precision": precision_score(y_true_all, y_pred_all, average="macro"),
+#         "Recall": recall_score(y_true_all, y_pred_all, average="macro"),
+#         "AUC": roc_auc_score(
+#             keras.utils.to_categorical(y_true_all),
+#             keras.utils.to_categorical(y_pred_all),
+#             multi_class="ovr",
+#         ),
+#         "Average Prediction Time (ms)": (total_time / num_examples) * 1000,
+#     }
+
+#     with open("model_evaluation_metrics.json", "w") as f:
+#         json.dump(metrics, f, indent=2)
+
+#     print("✅ Inference done. Metrics saved to model_evaluation_metrics.json")
+
 def run_infer(args):
+    import matplotlib
+    matplotlib.use('Agg')  # Ensures no Qt errors in headless environments
+    import matplotlib.pyplot as plt
+
     # Load the model
     custom_objects = {
         "auc_focal_loss_fixed": auc_focal_loss(alpha=args.alpha, gamma=args.gamma),
@@ -599,8 +687,8 @@ def run_infer(args):
 
     # ----------- TEST LOADER MODE ------------
     print("🧪 Running inference on test dataset...")
-    test_ids = os.listdir(os.path.join(args.data, "images"))  # assuming all available
-    _, _, test_ids = split_dataset(test_ids, train_frac=0.8, val_frac=0.1, test_frac=0.1)
+    all_ids = os.listdir(os.path.join(args.data, "images"))
+    _, _, test_ids = split_dataset(all_ids, train_frac=0.8, val_frac=0.1, test_frac=0.1)
 
     test_loader = DynamicDataLoader(
         data_dir=args.data,
@@ -616,8 +704,8 @@ def run_infer(args):
     )
 
     y_true_all, y_pred_all = [], []
-    k = 0
     total_time, num_examples = 0, 0
+    k = 0  # Visualization counter
 
     for X_batch, y_batch in test_loader:
         start_time = time.time()
@@ -625,27 +713,41 @@ def run_infer(args):
         total_time += time.time() - start_time
         num_examples += X_batch.shape[0]
 
+        # Accumulate all ground truth and predicted labels
         y_true_all.extend(np.argmax(y_batch, axis=-1).flatten())
         y_pred_all.extend(np.argmax(preds, axis=-1).flatten())
 
-        if args.visualize:
-            for i in range(min(args.visualize, X_batch.shape[0])):
+        # Visualization limited to the first few images across batches
+        if args.visualize and k < args.visualize:
+            for i in range(min(args.visualize - k, X_batch.shape[0])):
                 k = visualize_comparison(k, X_batch, y_batch, preds, i, args.num_classes)
 
-    # Metrics
+    # Calculate metrics on the entire test set
+    accuracy = accuracy_score(y_true_all, y_pred_all)
+    f1 = f1_score(y_true_all, y_pred_all, average="macro")
+    precision = precision_score(y_true_all, y_pred_all, average="macro")
+    recall = recall_score(y_true_all, y_pred_all, average="macro")
+    auc = roc_auc_score(
+        keras.utils.to_categorical(y_true_all),
+        keras.utils.to_categorical(y_pred_all),
+        multi_class="ovr",
+    )
+    conf_matrix = confusion_matrix(y_true_all, y_pred_all)
+
+    average_time_per_image_ms = (total_time / num_examples) * 1000
+
+    # Create metrics dictionary
     metrics = {
-        "Accuracy": accuracy_score(y_true_all, y_pred_all),
-        "F1": f1_score(y_true_all, y_pred_all, average="macro"),
-        "Precision": precision_score(y_true_all, y_pred_all, average="macro"),
-        "Recall": recall_score(y_true_all, y_pred_all, average="macro"),
-        "AUC": roc_auc_score(
-            keras.utils.to_categorical(y_true_all),
-            keras.utils.to_categorical(y_pred_all),
-            multi_class="ovr",
-        ),
-        "Average Prediction Time (ms)": (total_time / num_examples) * 1000,
+        "Accuracy": accuracy,
+        "F1": f1,
+        "Precision": precision,
+        "Recall": recall,
+        "AUC": auc,
+        "Confusion Matrix": conf_matrix.tolist(),  # Save confusion matrix explicitly
+        "Average Inference Time per Image (ms)": average_time_per_image_ms,
     }
 
+    # Save metrics to JSON
     with open("model_evaluation_metrics.json", "w") as f:
         json.dump(metrics, f, indent=2)
 

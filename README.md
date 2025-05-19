@@ -83,7 +83,8 @@ swin_infer(
     model_dir="./checkpoint",     # Where the model was saved
     num_classes=2,                # Must match training
     gamma=2.0, alpha=0.25,        # Same focal loss settings
-    input_scale=255,              # Match input normalization
+    input_scale=255,
+    mask_scale=255,               # Match input normalization
     visualize=10                  # Save N test results (use -1 for full test set)
 )
 ```
