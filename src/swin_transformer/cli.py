@@ -393,52 +393,124 @@ def compute_iou(true_mask, pred_mask, num_classes):
     return iou_per_class
 
 
-def visualize_comparison(k, X_images, y_true, y_pred_logits, batch_idx, num_classes):
+# def visualize_comparison(k, X_images, y_true, y_pred_logits, batch_idx, num_classes):
+#     plt.figure(figsize=(12, 12))
+#     img = X_images[batch_idx]
+#     pred_mask = np.argmax(y_pred_logits[batch_idx], axis=-1)
+#     true_mask = np.argmax(y_true[batch_idx], axis=-1)
+
+#     # 1 – Original
+#     ax = plt.subplot(2, 2, 1)
+#     ax.imshow(img)
+#     ax.set_title("Original")
+#     ax.axis("off")
+
+#     # 2 – Prediction
+#     ax = plt.subplot(2, 2, 2)
+#     ax.imshow(img)
+#     ax.imshow(pred_mask, alpha=0.5, cmap="coolwarm")
+#     ax.set_title("Predicted")
+#     ax.axis("off")
+
+#     # 3 – Ground Truth
+#     ax = plt.subplot(2, 2, 3)
+#     ax.imshow(img)
+#     ax.imshow(true_mask, alpha=0.5, cmap="coolwarm")
+#     ax.set_title("Ground Truth")
+#     ax.axis("off")
+
+#     # 4 – TP/FP/FN/TN overlay
+#     TP = (pred_mask == true_mask) & (true_mask == 1)
+#     FP = (pred_mask != true_mask) & (pred_mask == 1)
+#     FN = (pred_mask != true_mask) & (true_mask == 1)
+#     TN = (pred_mask == true_mask) & (true_mask == 0)
+#     overlay = img.copy()
+#     overlay[TP] = [0, 255, 0]
+#     overlay[FP] = [255, 0, 0]
+#     overlay[FN] = [0, 0, 255]
+#     overlay[TN] = [128, 128, 128]
+#     ax = plt.subplot(2, 2, 4)
+#     ax.imshow(overlay)
+#     ax.set_title("TP/FP/FN/TN")
+#     ax.axis("off")
+
+#     plt.tight_layout()
+#     out_name = f"results_comparison_{batch_idx+1}_{k}.png"
+#     plt.savefig(out_name, bbox_inches="tight")
+#     plt.close()
+    # return k + 1
+def visualize_comparison(k, X_images, y, refined_segmentation, batch_idx, num_classes, 
+                         font_size=12, font_style='DejaVu Sans', xtick_size=10, ytick_size=10):
+    """Visualizes the original image, predicted mask, actual mask, and TP, FP, FN, TN with custom styling."""
+    
+    # Set font size and style for titles and labels
+    plt.rcParams.update({'font.size': font_size, 'font.family': font_style})
+
     plt.figure(figsize=(12, 12))
-    img = X_images[batch_idx]
-    pred_mask = np.argmax(y_pred_logits[batch_idx], axis=-1)
-    true_mask = np.argmax(y_true[batch_idx], axis=-1)
 
-    # 1 – Original
-    ax = plt.subplot(2, 2, 1)
-    ax.imshow(img)
-    ax.set_title("Original")
-    ax.axis("off")
+    # Original Image
+    plt.subplot(2, 2, 1)
+    plt.imshow(X_images[batch_idx])  # Indexing the batch here
+    plt.title("Original Image", fontsize=font_size, fontweight='bold')
+    plt.axis('off')
 
-    # 2 – Prediction
-    ax = plt.subplot(2, 2, 2)
-    ax.imshow(img)
-    ax.imshow(pred_mask, alpha=0.5, cmap="coolwarm")
-    ax.set_title("Predicted")
-    ax.axis("off")
+    # Predicted Mask
+    proposed_mask = np.argmax(refined_segmentation[batch_idx], axis=-1)  # argmax to get 2D mask
+    plt.subplot(2, 2, 2)
+    plt.imshow(X_images[batch_idx])
+    plt.imshow(proposed_mask, alpha=0.5, cmap='coolwarm')  # Predicted Mask Overlay
+    plt.title("Predicted Mask", fontsize=font_size, fontweight='bold')
+    plt.axis('off')
 
-    # 3 – Ground Truth
-    ax = plt.subplot(2, 2, 3)
-    ax.imshow(img)
-    ax.imshow(true_mask, alpha=0.5, cmap="coolwarm")
-    ax.set_title("Ground Truth")
-    ax.axis("off")
+    # Actual Mask (Ground truth)
+    actual_mask = np.argmax(y[batch_idx], axis=-1)  # Ground truth mask
+    plt.subplot(2, 2, 3)
+    plt.imshow(X_images[batch_idx])
+    plt.imshow(actual_mask, alpha=0.5, cmap='coolwarm')  # Actual Mask Overlay
+    plt.title("Actual Mask (Ground Truth)", fontsize=font_size, fontweight='bold')
+    plt.axis('off')
 
-    # 4 – TP/FP/FN/TN overlay
-    TP = (pred_mask == true_mask) & (true_mask == 1)
-    FP = (pred_mask != true_mask) & (pred_mask == 1)
-    FN = (pred_mask != true_mask) & (true_mask == 1)
-    TN = (pred_mask == true_mask) & (true_mask == 0)
-    overlay = img.copy()
-    overlay[TP] = [0, 255, 0]
-    overlay[FP] = [255, 0, 0]
-    overlay[FN] = [0, 0, 255]
-    overlay[TN] = [128, 128, 128]
-    ax = plt.subplot(2, 2, 4)
-    ax.imshow(overlay)
-    ax.set_title("TP/FP/FN/TN")
-    ax.axis("off")
+    # Overlay TP, FP, FN, TN
+    TP = (proposed_mask == actual_mask) & (actual_mask == 1)  # True Positives
+    FP = (proposed_mask != actual_mask) & (proposed_mask == 1)  # False Positives
+    FN = (proposed_mask != actual_mask) & (actual_mask == 1)  # False Negatives
+    TN = (proposed_mask == actual_mask) & (actual_mask == 0)  # True Negatives
 
+    image_with_metrics = X_images[batch_idx].copy()
+    image_with_metrics[TP] = [0, 255, 0]  # Green for TP
+    image_with_metrics[FP] = [255, 0, 0]  # Red for FP
+    image_with_metrics[FN] = [0, 0, 255]  # Blue for FN
+    image_with_metrics[TN] = [128, 128, 128]  # Gray for TN
+
+    plt.subplot(2, 2, 4)
+    plt.imshow(image_with_metrics)
+
+    # Custom title with corresponding colors for TP, FP, FN, TN (colored text in title)
+    plt.text(0.35, 1.05, 'TP', color='green', fontsize=font_size, fontweight='bold', ha='center', transform=plt.gca().transAxes)
+    plt.text(0.45, 1.05, 'FP', color='red', fontsize=font_size, fontweight='bold', ha='center', transform=plt.gca().transAxes)
+    plt.text(0.55, 1.05, 'FN', color='blue', fontsize=font_size, fontweight='bold', ha='center', transform=plt.gca().transAxes)
+    plt.text(0.65, 1.05, 'TN', color='gray', fontsize=font_size, fontweight='bold', ha='center', transform=plt.gca().transAxes)
+    
+    # Center the main title with colored labels
+    plt.title(
+        "", 
+        fontsize=font_size, 
+        fontweight='bold', 
+        loc='center'  # This ensures the title is centered
+    )
+    
+    plt.axis('off')
+
+    # Set the x and y ticks sizes
+    plt.xticks(fontsize=xtick_size)
+    plt.yticks(fontsize=ytick_size)
+
+    # Save the comparison plot
     plt.tight_layout()
-    out_name = f"results_comparison_{batch_idx+1}_{k}.png"
-    plt.savefig(out_name, bbox_inches="tight")
+    plt.savefig(f'results_comparison_{batch_idx + 1}_{k}.png', bbox_inches='tight')
+    k = k + 1
     plt.close()
-    return k + 1
+    return k
 
 
 def run_train(args):
