@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name        = "keras-swin-unet"
-version     = "0.2.5"
+version     = "0.2.6"
 description = "Revolutionize geospatial analysis with Swin-UNet — satellite imagery segmentation using Swin Transformers and UNet. Achieve SOTA precision in road extraction. For GIS professionals, urban planners, and AI researchers. Train, test, and infer in three lines of code."
 authors     = ["L-A-Sandhu <laeeq.aslam.100@gmail.com>"]
 license     = "MIT"
