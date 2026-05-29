@@ -186,22 +186,9 @@ model.fit(train_loader, validation_data=val_loader, epochs=100)
 
 ## Performance
 
-### DeepGlobe Road Extraction
-
-Binary segmentation, 512×512, trained on the full DeepGlobe dataset.
-
-| Metric | Score |
-|--------|-------|
-| Accuracy | 98.4% |
-| Precision | 90.1% |
-| Recall | 89.2% |
-| F1 Score | 0.897 |
-
-![Road Extraction](Results/3.png)
-
 ### PennFudan Pedestrian Detection
 
-Binary segmentation, 256×256, **170 images, trained from scratch** in ~37 minutes on CPU.
+Binary segmentation, 256×256, **170 images, trained from scratch** in ~37 minutes on CPU. No pre-training, no fine-tuning.
 
 | Metric | Score |
 |--------|-------|
@@ -211,11 +198,17 @@ Binary segmentation, 256×256, **170 images, trained from scratch** in ~37 minut
 | Recall | 76.1% |
 | F1 Score | 0.758 |
 
-**Sample predictions** (model trained from scratch, not fine-tuned):
+**Sample predictions** from the test set:
 
-![PennFudan Results](Results/pennfudan/comparison_strip.png)
+![PennFudan Showcase](Results/pennfudan/showcase.png)
 
-*Left to right: input image, ground truth mask, model prediction (green), overlay. The model correctly identifies pedestrian locations despite training on only 118 images.*
+*Left to right: input image, ground truth mask, model prediction, error map (green = true positive, red = false positive, blue = false negative).*
+
+### Multi-Sample Comparison
+
+![PennFudan Grid](Results/pennfudan/comparison_grid.png)
+
+*Three test samples with per-sample IoU scores. The model localizes pedestrians well despite heavy class imbalance (~10% foreground pixels) and limited training data.*
 
 ## Applications
 
