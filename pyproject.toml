@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name        = "keras-swin-unet"
-version     = "0.2.0"
+version     = "0.2.1"
 description = "Production-ready Swin-UNet for image segmentation — transformer-powered U-Net with hierarchical shifted-window attention, built on Keras/TensorFlow."
 authors     = ["L-A-Sandhu <laeeq.aslam.100@gmail.com>"]
 license     = "MIT"
