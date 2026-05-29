@@ -6,7 +6,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name        = "keras-swin-unet"
 version     = "0.2.3"
-description = "Production-ready Swin-UNet for image segmentation — transformer-powered U-Net with hierarchical shifted-window attention, built on Keras/TensorFlow."
+description = "Revolutionize geospatial analysis with Swin-UNet — satellite imagery segmentation using Swin Transformers and UNet. Achieve SOTA precision in road extraction. For GIS professionals, urban planners, and AI researchers. Train, test, and infer in three lines of code."
 authors     = ["L-A-Sandhu <laeeq.aslam.100@gmail.com>"]
 license     = "MIT"
 readme      = "README.md"
@@ -20,8 +20,13 @@ keywords     = [
     "tensorflow",
     "keras",
     "remote-sensing",
-    "medical-imaging",
+    "geospatial-analysis",
     "satellite-imagery",
+    "road-extraction",
+    "land-cover-classification",
+    "urban-planning",
+    "gis",
+    "earth-observation",
     "computer-vision",
 ]
 homepage    = "https://github.com/L-A-Sandhu/keras-swin-unet"

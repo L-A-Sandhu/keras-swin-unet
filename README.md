@@ -1,4 +1,4 @@
-# Keras Swin-UNet — Simple Image Segmentation with Transformers
+# Swin-UNet — Satellite Imagery Segmentation with Transformers
 
 [![PyPI](https://img.shields.io/pypi/v/keras-swin-unet)](https://pypi.org/project/keras-swin-unet/)
 [![Python](https://img.shields.io/pypi/pyversions/keras-swin-unet)](https://pypi.org/project/keras-swin-unet/)
@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Downloads](https://img.shields.io/pypi/dm/keras-swin-unet)](https://pypi.org/project/keras-swin-unet/)
 
-**The easiest way to run Swin-UNet image segmentation in Keras.**  Two lines of Python to train a state-of-the-art transformer segmentation model. No boilerplate, no config files, no complicated setup.
+**Revolutionize geospatial analysis with Swin-UNet** — a cutting-edge solution for satellite imagery segmentation using Swin Transformers and UNet. Achieve state-of-the-art precision in road extraction, land cover classification, and infrastructure mapping. Ideal for GIS professionals, urban planners, and AI researchers. Train, test, and infer with just three lines of code.
 
 ```python
 from keras_swin_unet import swin_train, swin_infer
