@@ -188,17 +188,17 @@ model.fit(train_loader, validation_data=val_loader, epochs=100)
 
 ### PennFudan Pedestrian Detection
 
-Binary segmentation, 256×256, **170 images, trained from scratch** in ~37 minutes on CPU. No pre-training, no fine-tuning.
+Binary segmentation, 256×256, **170 images, trained from scratch** on CPU. No pre-training, no fine-tuning. 63 epochs, 11.4M params.
 
 | Metric | Score |
 |--------|-------|
-| Accuracy | 84.1% |
-| IoU (Jaccard) | 0.631 |
-| Precision | 75.5% |
-| Recall | 76.1% |
-| F1 Score | 0.758 |
+| Accuracy | 85.3% |
+| IoU (Jaccard) | 0.641 |
+| Precision | 77.8% |
+| Recall | 75.3% |
+| F1 Score | 0.764 |
 
-**Sample predictions** from the test set:
+**Best prediction** from the test set (IoU 0.813, Dice 0.897):
 
 ![PennFudan Showcase](Results/pennfudan/showcase.png)
 
@@ -208,7 +208,7 @@ Binary segmentation, 256×256, **170 images, trained from scratch** in ~37 minut
 
 ![PennFudan Grid](Results/pennfudan/comparison_grid.png)
 
-*Three test samples with per-sample IoU scores. The model localizes pedestrians well despite heavy class imbalance (~10% foreground pixels) and limited training data.*
+*Three test samples with per-sample IoU/Dice scores. The model segments pedestrians accurately despite heavy class imbalance (~10% foreground pixels) and only 118 training images.*
 
 ## Applications
 
