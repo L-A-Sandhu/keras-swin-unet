@@ -1,10 +1,54 @@
 from types import SimpleNamespace
-from swin_transformer.cli import run_train, run_infer
 
 
 def swin_train(**kwargs):
-    """
-    Keyword-friendly wrapper for training
+    """Keyword-friendly wrapper for training.
+
+    Parameters
+    ----------
+    data : str
+        Dataset path (must contain images/ and masks/).
+    model_dir : str
+        Folder to save model + logs.
+    num_classes : int
+        Number of output classes (2 for binary).
+    epochs : int
+        Training epochs.
+    bs : int
+        Batch size.
+    patience : int
+        Early stopping patience.
+    filter : int
+        Initial number of filters / embedding dimension.
+    depth : int
+        Depth of encoder / decoder (number of stages).
+    stack_down : int
+        Number of Swin transformer blocks per encoder stage.
+    stack_up : int
+        Number of Swin transformer blocks per decoder stage.
+    patch_size : list
+        Patch size for initial embedding.
+    num_heads : list
+        Attention heads per stage (length must match depth).
+    window_size : list
+        Window size per stage (length must match depth).
+    num_mlp : int
+        MLP hidden size in Swin blocks.
+    gamma : float
+        Gamma for focal-based losses.
+    alpha : float
+        Alpha for focal-based losses.
+    loss_type : str
+        Loss function: "focal", "dice", "bce", "bce_dice",
+        "focal_dice", "focal_tversky", "tversky".
+    input_shape : list
+        Input image shape [H, W, C].
+    input_scale : int
+        Divide input by this value.
+    mask_scale : int
+        Divide mask by this value.
+    visualize : int
+        Number of test samples to visualize.
     """
     args = {
         "data": "./demo_data",
@@ -23,50 +67,41 @@ def swin_train(**kwargs):
         "num_mlp": 512,
         "gamma": 2.0,
         "alpha": 0.25,
+        "loss_type": "focal",
         "input_shape": [512, 512, 3],
         "input_scale": 255,
         "mask_scale": 255,
         "visualize": 2,
-        **kwargs,  # override defaults
+        **kwargs,
     }
+    from swin_transformer.cli import run_train
     run_train(SimpleNamespace(**args))
 
 
-# def swin_infer(**kwargs):
-#     args = {
-#         "model_dir": "./checkpoint",
-#         "image": "./demo_data/images/104.jpg",
-#         "output": "output.png",
-#         "num_classes": 2,
-#         "gamma": 2.0,
-#         "alpha": 0.25,
-#         "input_scale": 255,
-#         "visualize": 1,
-#         **kwargs,
-#     }
-#     run_infer(SimpleNamespace(**args))
 def swin_infer(**kwargs):
-    """
-    Flexible wrapper for inference on either a single image or the test dataset.
-    If 'image' is provided in kwargs, it runs single-image inference.
-    Otherwise, it runs batch inference on the test set using the data loader.
+    """Flexible wrapper for inference on either a single image or the test dataset.
+
+    If 'image' is provided, runs single-image inference.
+    Otherwise, runs batch inference on the test set using the data loader.
     """
     args = {
         "model_dir": "./checkpoint",
-        "image": None,  # if None, use test loader
+        "image": None,
         "output": "output.png",
         "num_classes": 2,
         "gamma": 2.0,
         "alpha": 0.25,
+        "loss_type": "focal",
         "input_scale": 255,
-        "data": "./demo_data",  # required for test loader fallback
-        "bs": 4,                # batch size for test loader
+        "mask_scale": 255,
+        "data": "./demo_data",
+        "bs": 4,
         "input_shape": [512, 512, 3],
         "visualize": 1,
         **kwargs,
     }
+    from swin_transformer.cli import run_infer
     run_infer(SimpleNamespace(**args))
-
 
 
 __all__ = ["swin_train", "swin_infer"]

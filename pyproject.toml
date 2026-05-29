@@ -5,11 +5,40 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name        = "keras-swin-unet"
-version     = "0.1.8"                           # bump as you release
-description = "A robust, flexible Swin‑UNet package built with Keras/TensorFlow for image‑segmentation tasks."
-authors     = ["L‑A‑Sandhu <laeeq.aslam.100@gmail.com>"]
+version     = "0.2.0"
+description = "Production-ready Swin-UNet for image segmentation — transformer-powered U-Net with hierarchical shifted-window attention, built on Keras/TensorFlow."
+authors     = ["L-A-Sandhu <laeeq.aslam.100@gmail.com>"]
 license     = "MIT"
 readme      = "README.md"
+keywords     = [
+    "deep-learning",
+    "image-segmentation",
+    "semantic-segmentation",
+    "swin-transformer",
+    "unet",
+    "vision-transformer",
+    "tensorflow",
+    "keras",
+    "remote-sensing",
+    "medical-imaging",
+    "satellite-imagery",
+    "computer-vision",
+]
+homepage    = "https://github.com/L-A-Sandhu/keras-swin-unet"
+repository  = "https://github.com/L-A-Sandhu/keras-swin-unet"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+]
 
 # ship both runtime packages
 packages = [
@@ -19,7 +48,7 @@ packages = [
 
 
 [tool.poetry.dependencies]
-python        = ">=3.10,<3.11"
+python        = ">=3.10"
 numpy         = "^1.26.4"
 tensorflow    = "^2.19.0"
 pillow        = "^11.2.1"
@@ -30,7 +59,6 @@ tqdm          = "^4.67.1"
 
 
 [tool.poetry.scripts]
-# public console command → cli.main()
 swin-unet = "swin_transformer.cli:main"
 
 
